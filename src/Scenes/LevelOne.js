@@ -63,21 +63,8 @@ class LevelOne extends Phaser.Scene {
         this.restart = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R);
         this.throw = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
         this.debugSummon = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.COMMA);
-        
-        // collisions
-        // this.axeCollisionCategory = this.matter.world.nextCategory();
-        // this.alchCollisionCategory = this.matter.world.nextCategory();
-
-        // axe projectile group
-        // this.axes = [];
-        // for (let i = 0; i < 64; i++){
-        //     const axe = new Bullet(this.matter.world, 0, 0, 'axe', wrapBounds);
-        //     axe.setCollisionCategory(this.axeCollisionCategory);
-        //     axe.setCollidesWith([ this.alchCollisionCategory]);
-        //     axe.setOnCollide(this.bulletVsEnemy);
-        //     this.axes.push(axe);
-        // }
-
+    
+        // axes group
         my.sprite.axeGroup = this.add.group({
             active: true,
             defaultKey: "axe",
@@ -93,13 +80,6 @@ class LevelOne extends Phaser.Scene {
         my.sprite.axeGroup.propertyValueSet("speed", this.bulletSpeed);
 
         // alchemists group
-        // this.alchemists = [];
-        // for (let i = 0; i < 6; i++){
-        //     const alchemist = new Enemy(this.matter.world, Phaser.Math.Between(0, 800), Phaser.Math.Between(0, 600), 'enemy', wrapBounds);
-        //     alchemist.setCollisionCategory(this.alchCollisionCategory);
-        //     alchemist.setCollidesWith([this.axeCollisionCategory ]);
-        //     this.alchemists.push(alchemist);
-        // }
 
         my.sprite.alchGroup = this.add.group({
             active: true,
@@ -114,29 +94,8 @@ class LevelOne extends Phaser.Scene {
             repeat: my.sprite.alchGroup.maxSize-1
         });
         my.sprite.alchGroup.propertyValueSet("speed", this.moveSpeed);
-
-        // collisions
-        // this.physics.add.overlap(my.sprite.axeGroup, my.sprite.alchGroup, this.killEnemy);
-        
-        
     }
 
-    killEnemy = function (proj, enemy){ // Bullet class proj, Enemy class enemy
-        proj.kill();
-        enemy.kill();
-        console.log('hit' + (Math.ceil(Math.random()*5)));
-    }
-
-    // bulletVsEnemy (collisionData){
-    //     const bullet = collisionData.bodyA.gameObject;
-    //     const enemy = collisionData.bodyB.gameObject;
-    //     bullet.setActive(false);
-    //     bullet.setVisible(false);
-    //     bullet.world.remove(bullet.body, true);
-    //     enemy.setActive(false);
-    //     enemy.setVisible(false);
-    //     enemy.world.remove(enemy.body, true);
-    // }
 
     update(time, delta){
         let my = this.my;
@@ -146,10 +105,6 @@ class LevelOne extends Phaser.Scene {
             axe.setScale(2.0);
             axe.angle-=10;
 
-            my.sprite.alchGroup.children.iterate(alch => {
-                this.physics.add.overlap(axe, alch, this.killEnemy(axe, alch));
-                alch.setScale(3.0);
-            });
 
             // delete or hide axes when hitting wall
             if (axe.y <= 144){
@@ -235,22 +190,3 @@ class LevelOne extends Phaser.Scene {
         }
     }
 }
-
-/** Collision detection
- * theres a built in system: Arcade Physics
- * 
- * initialize
- * (make groups)
- * make sprites
- * add sprites to groups
- * state which groups can collide w/ eachother
- * add collision handler
- * 
- * staticGroup = this.physics.add.staticGroup()
- * this would be used for walls, ground
- * group = this.physics.add.group()
- * for moving objects
- * 
- * 
- * 
- */
